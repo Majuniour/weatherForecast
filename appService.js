@@ -1,7 +1,7 @@
 import { AsyncStorage, Alert } from 'react-native';
 
 export const currentLocationWeather = (latLon) => {
-    
+    console.log("new lance", latLon)
     const URL = `http://api.openweathermap.org/data/2.5/weather?lat=${latLon[0]}&lon=${latLon[1]}&appid=15400b39b890389eb45052fdbd74bfce&units=metric`;
     return URL
 }
@@ -44,7 +44,7 @@ _storeFavLocations = async (arr) => {
       const myKey = [...JSON.parse(favouritePlaces), arr[0]];
 
 
-      console.log("my key", JSON.stringify(myKey))
+      //console.log("my key", JSON.stringify(myKey))
       
      // var favouritePlaces = await AsyncStorage.getItem('favouritePlaces');
       await AsyncStorage.setItem(
@@ -60,7 +60,7 @@ _storeFavLocations = async (arr) => {
       const savedPlaces = await AsyncStorage.getItem('favouritePlaces');
       if (savedPlaces !== null) {
         // We have data!!
-        console.log("Saved", savedPlaces);
+        //console.log("Saved", savedPlaces);
         return savedPlaces
       }
     } catch (error) {

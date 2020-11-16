@@ -1,62 +1,81 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image} from 'react-native';
-import { getWeatherIcon, getColor } from '../../appService';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, ActivityIndicator} from 'react-native';
+import { currentLocationWeather } from '../../appService';
+import axios from "axios";
 
 import moment from 'moment';
 
  const ListDetails = (props) => {
   //console.log("Props",JSON.parse(props.route.params.dayWeather))
   const selectedLocation = JSON.parse(props.route.params.locationWeatherData);
-  console.log("selectedLocation", selectedLocation)
+  //console.log("selectedLocation", selectedLocation)
+
+  let [weatherData, setWeatherData] = useState({});
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => { 
+        //console.log("Lat", latLon[1])
+        axios.get(`${currentLocationWeather(Object.values(selectedLocation.coord))}`).then(response => {
+        //console.log("response", response.data)
+          setWeatherData(response.data);
+          setLoading(false);
+        });
+  }, []);
+
+  if (isLoading) {
+    return <View style={styles.activityLoader}>
+      <ActivityIndicator size="large" color="#9bc235"/>
+    </View>;
+  }
 
   return (
-    <View style={ {flex: 1}}>
+    <View style={ {flex: 1, padding:10, borderRadius:10}}>
       <ScrollView style={styles.scrollView}>
       <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={styles.grid}><Text style={styles.title}>Weather Description</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.weather[0].description}</Text></View>
+      </View>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={styles.grid}><Text style={styles.title}>Weather Condition</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.weather[0].main}</Text></View>
+      </View>
+      <View style={{flex: 1, flexDirection: 'row'}}>
         <View style={styles.grid}><Text style={styles.title}>Feals Like</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{selectedLocation.main.feels_like}&#8451;</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.main.feels_like}&#8451;</Text></View>
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
       <View style={styles.grid}><Text style={styles.title}>Humidity</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{selectedLocation.main.humidity}&#8451;</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.main.humidity}&#8451;</Text></View>
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
       <View style={styles.grid}><Text style={styles.title}>Pressure</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{selectedLocation.main.feels_like}&#8451;</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.main.feels_like}&#8451;</Text></View>
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
       <View style={styles.grid}><Text style={styles.title}>Current Temp</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{selectedLocation.main.temp}&#8451;</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.main.temp}&#8451;</Text></View>
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
       <View style={styles.grid}><Text style={styles.title}>Min Temp</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{selectedLocation.main.temp_min}&#8451;</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.main.temp_min}&#8451;</Text></View>
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
-      <View style={styles.grid}><Text style={styles.title}>Max Temp</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{selectedLocation.main.temp_max}&#8451;</Text></View>
+        <View style={styles.grid}><Text style={styles.title}>Max Temp</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.main.temp_max}&#8451;</Text></View>
       </View>
-          {/* <View style={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            alignItems: 'stretch',
-            backgroundColor: 'red'
-          }, styles.touchable}> */}
-          {/* <View style={styles.itemContainer}>
-             <Text style={styles.title}>Feals Like: {selectedLocation.main.feels_like}&#8451; </Text> 
-             <Text style={styles.title}>Humidity: {selectedLocation.main.humidity}</Text>
-             <Text style={styles.title}>Pressure: {selectedLocation.main.pressure}</Text>
-             <Text style={styles.title}>Temp: {selectedLocation.main.temp}</Text>
-             <Text style={styles.title}>Min Temp: {selectedLocation.main.temp_min}</Text>
-             <Text style={styles.title}>Max Temp: {selectedLocation.main.temp_max}</Text>
-          </View> */}
-           
-        
-
-          {/* </View>   */}
-        
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={styles.grid}><Text style={styles.title}>Wind Speed</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.wind.speed}</Text></View>
+      </View>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={styles.grid}><Text style={styles.title}>Latitude</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{selectedLocation.coord.lat}</Text></View>
+      </View>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={styles.grid}><Text style={styles.title}>Longitude</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{selectedLocation.coord.lon}</Text></View>
+      </View>
         </ScrollView>
       <StatusBar style="auto" />
     </View>
@@ -83,13 +102,13 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    fontSize: 20,
+    fontSize: 12,
     fontWeight: 'bold',
     color: 'white',
-    height: 50,
-    padding: 2,
-    alignContent:'center',
-    alignSelf: 'flex-end'
+    height: 30,
+    alignSelf: 'flex-end',
+    padding:5,
+    textTransform: 'capitalize'
 },
 activityLoader: {
   flex: 1,
@@ -108,12 +127,10 @@ header:{
 },
 grid:{
     backgroundColor:'#007fba',
-    height:'50%',
     width:'50%'
 },
 grid2:{
     backgroundColor:'#006fba',
-    height:'50%',
     width:'50%'
 }
 });
