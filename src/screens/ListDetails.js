@@ -70,15 +70,15 @@ import moment from 'moment';
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
         <View style={styles.grid}><Text style={styles.title}>Latitude</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{selectedLocation.coord.lat}</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.coord.lat}</Text></View>
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
         <View style={styles.grid}><Text style={styles.title}>Longitude</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{selectedLocation.coord.lon}</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.coord.lon}</Text></View>
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
-        <View style={styles.grid}><Text style={styles.title}>Time Stamp</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{moment.unix(selectedLocation.dt).format('LLL')}</Text></View>
+        <View style={styles.grid}><Text style={styles.title}>Last Updated Time</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{moment.unix(weatherData.dt).format('LLL')}</Text></View>
       </View>
         </ScrollView>
       <StatusBar style="auto" />
