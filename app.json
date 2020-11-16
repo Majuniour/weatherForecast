@@ -35,6 +35,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "List View (updates)"
+    "description": "Handle Offline mode"
   }
 }

@@ -84,6 +84,10 @@ import moment from 'moment';
   );
 }
 
+List.navigationOptions = ({ navigation }) => ({
+    title: "Home",
+})
+
 const styles = StyleSheet.create({
   itemContainer: {
     width:'100%',

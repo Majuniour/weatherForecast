@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from "@react-navigation/native";
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Button} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Button, Alert, } from 'react-native';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import {
   MenuContext,
@@ -20,8 +21,8 @@ import axios from "axios";
 import moment from 'moment';
 
 const Home = props => {
-
-  //console.log("props", props)
+    const netInfo = useNetInfo();
+   
     const isVisible = useIsFocused();
     const [isLoading, setLoading] = useState(true);
     let [weatherData, setWeatherData] = useState({});
@@ -40,11 +41,23 @@ const Home = props => {
         console.log("reloaded"); 
         if(latLon){
           //console.log("Lat", latLon[1])
+          console.log("Network", netInfo)
+          netInfo.isConnected === true ?
           axios.get(`${currentLocationWeather(latLon)}`).then(response => {
             setWeatherData(response.data);
             setWeatherImage(response.data.weather[0].main);
             setWeatherColor(response.data.weather[0].main);
-          });
+            setLoading(false);
+          })
+          : `${Alert.alert(
+            "NETWORK INFO",
+            "You're currently offline, Press OK to view saved favourite locations.",
+            [
+              { text: "OK", onPress: () => {props.navigation.navigate('List')} }
+            ],
+            { cancelable: false }
+          )}`
+          ;
         }
      }
 
@@ -68,7 +81,7 @@ const Home = props => {
         setWeatherDataFocust(weatherByDate);
         setDays(Days);
         setWeeklyDays(weekDays);
-        setLoading(false);
+       
       });
     }
     }, [latLon]);
@@ -86,7 +99,7 @@ const Home = props => {
       justifyContent: 'center',
       alignItems: 'stretch',
     }}>
-     
+
       <View style={styles.imageContainer}>
         <Image style={styles.img} source={getImage(`${weatherImage}`)} />
         <Text style={styles.mainForecast}>{JSON.stringify(weatherData.main.temp)}&#8451;</Text>

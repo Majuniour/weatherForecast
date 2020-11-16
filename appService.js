@@ -1,4 +1,6 @@
 import { AsyncStorage, Alert } from 'react-native';
+import {NetInfo} from '@react-native-community/netinfo';
+import React, { useState, useEffect } from 'react';
 
 export const currentLocationWeather = (latLon) => {
     console.log("new lance", latLon)

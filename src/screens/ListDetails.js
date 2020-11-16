@@ -46,7 +46,7 @@ import moment from 'moment';
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
       <View style={styles.grid}><Text style={styles.title}>Humidity</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{weatherData.main.humidity}&#8451;</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.main.humidity} %</Text></View>
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
       <View style={styles.grid}><Text style={styles.title}>Pressure</Text></View>
@@ -66,7 +66,7 @@ import moment from 'moment';
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
         <View style={styles.grid}><Text style={styles.title}>Wind Speed</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{weatherData.wind.speed}</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{weatherData.wind.speed} km/h</Text></View>
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
         <View style={styles.grid}><Text style={styles.title}>Latitude</Text></View>
@@ -75,6 +75,10 @@ import moment from 'moment';
       <View style={{flex: 1, flexDirection: 'row'}}>
         <View style={styles.grid}><Text style={styles.title}>Longitude</Text></View>
         <View style={styles.grid2}><Text style={styles.title}>{selectedLocation.coord.lon}</Text></View>
+      </View>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={styles.grid}><Text style={styles.title}>Time Stamp</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{moment.unix(selectedLocation.dt).format('LLL')}</Text></View>
       </View>
         </ScrollView>
       <StatusBar style="auto" />
