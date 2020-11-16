@@ -1,21 +1,62 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
+import React from 'react';
+
+import { Button, Text } from 'react-native'
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+//Screens
+import Home from './src/screens/Home';
+import Details from './src/screens/Details';
+import Maps from './src/screens/Favourite'
+
+
+const Stack = createStackNavigator();
+
+function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Home} 
+        options={
+          { 
+            title: 'WEATHER APP',
+            headerStyle: {
+            backgroundColor: '#007fba',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          }
+          }} />
+        <Stack.Screen name="Details" component={Details}  options={
+          { 
+            title: '',
+            headerStyle: {
+            backgroundColor: '#007fba',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          }} />
+          <Stack.Screen name="Maps" component={Maps}  options={
+          { 
+            title: 'PLACES',
+            headerStyle: {
+            backgroundColor: '#007fba',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+
+export default App;
