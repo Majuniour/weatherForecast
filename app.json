@@ -35,6 +35,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "Maps API Data"
+    "description": "List View"
   }
 }
