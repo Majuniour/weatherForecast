@@ -2,6 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from "@react-navigation/native";
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Button} from 'react-native';
+
+import {
+  MenuContext,
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
+import { Ionicons } from '@expo/vector-icons';
+
 import { currentLocationWeather, fetch5DayWeatherFocust, getImage, getColor, getWeatherIcon, addToFavourite } from "../../appService";
 import useGeoLocation from "../components/geoLocation";
 import Colors from '../constants/Colors';
@@ -133,11 +143,12 @@ const Home = props => {
         </ScrollView>
         <View style={styles.actions}>
                 <Button color={Colors.accent} title="Add To Favourite" onPress={() => {addToFavourite(`${JSON.stringify(weatherData)}`)}}/>
-                <Button color={Colors.primary} title="View Favourite" onPress={() =>
-          props.navigation.navigate('Maps', 
-          { 
-            coordinates: geolocation,
-          })}/>
+                
+                <Button color={Colors.primary} title="View Map" onPress={() =>
+                  props.navigation.navigate('Maps', 
+                    { coordinates: geolocation})}
+                    ></Button>
+                    <Button color={Colors.accent} title="View List" onPress={() => props.navigation.navigate('List')}/>
             </View>
       </View>
       <StatusBar style="auto" />

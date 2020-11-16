@@ -10,6 +10,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './src/screens/Home';
 import Details from './src/screens/Details';
 import Maps from './src/screens/Favourite'
+import List from './src/screens/List'
+import ListDatails from './src/screens/ListDetails'
 
 
 const Stack = createStackNavigator();
@@ -44,6 +46,28 @@ function App() {
           <Stack.Screen name="Maps" component={Maps}  options={
           { 
             title: 'PLACES',
+            headerStyle: {
+            backgroundColor: '#007fba',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          }} />
+            <Stack.Screen name="List" component={List}  options={
+          { 
+            title: 'MY SAVED LIST',
+            headerStyle: {
+            backgroundColor: '#007fba',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          }} />
+          <Stack.Screen name="ListDatails" component={ListDatails}  options={
+          { 
+            title: 'List Details',
             headerStyle: {
             backgroundColor: '#007fba',
           },
