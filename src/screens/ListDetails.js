@@ -78,7 +78,7 @@ import moment from 'moment';
       </View>
       <View style={{flex: 1, flexDirection: 'row'}}>
         <View style={styles.grid}><Text style={styles.title}>Last Updated Time</Text></View>
-        <View style={styles.grid2}><Text style={styles.title}>{moment.unix(weatherData.dt).format('LLL')}</Text></View>
+        <View style={styles.grid2}><Text style={styles.title}>{moment.unix(weatherData.dt).format('lll')}</Text></View>
       </View>
         </ScrollView>
       <StatusBar style="auto" />

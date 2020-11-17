@@ -5,10 +5,14 @@ import { _retrieveData, getWeatherIcon } from '../../appService';
 import { useIsFocused } from "@react-navigation/native";
 
 import color from '../constants/Colors';
-
+import NetInfo from "@react-native-community/netinfo";
 import moment from 'moment';
-
+ navigationOptions = ({ navigation }) => ({
+    title: "Home",
+})
  const List = (props) => {
+
+    
 
     const isVisible = useIsFocused();
     const [isLoading, setLoading] = useState(true);
@@ -21,6 +25,28 @@ import moment from 'moment';
         if (isVisible) {
   
           console.log("called when screen open or when back on screen "); 
+         
+          try {
+            // Subscribe
+                    const unsubscribe = NetInfo.addEventListener(state => {
+                      console.log("Connection type", state.type);
+                      console.log("Is connected?", state.isConnected);
+                      !state.isConnected ? `${Alert.alert(
+                        "NETWORK INFO",
+                        "You're currently offline, Press OK to view saved favourite locations.",
+                        [
+                          { text: "OK", onPress: () => {props.navigation.navigate('List')} }
+                        ],
+                        { cancelable: false }
+                      )}`
+                      : state.isConnected
+                    });
+            
+                    // Unsubscribe
+                    unsubscribe();
+                 } catch (e) {}
+            
+              
        }
        const asyncFunctionData = async () => {
          try {
@@ -84,9 +110,7 @@ import moment from 'moment';
   );
 }
 
-List.navigationOptions = ({ navigation }) => ({
-    title: "Home",
-})
+
 
 const styles = StyleSheet.create({
   itemContainer: {

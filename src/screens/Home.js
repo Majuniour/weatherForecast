@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from "@react-navigation/native";
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Button, Alert, } from 'react-native';
-import { useNetInfo } from '@react-native-community/netinfo';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Button, Alert} from 'react-native';
+
+
+import NetInfo from "@react-native-community/netinfo";
 
 import {
   MenuContext,
@@ -19,9 +21,7 @@ import Colors from '../constants/Colors';
 import axios from "axios";
 
 import moment from 'moment';
-
 const Home = props => {
-    const netInfo = useNetInfo();
    
     const isVisible = useIsFocused();
     const [isLoading, setLoading] = useState(true);
@@ -32,24 +32,20 @@ const Home = props => {
     let [days, setDays] = useState({});
     let [weeklyDays, setWeeklyDays] = useState({});
     let [geolocation, setGeolocation] = useState({});
+    let [net, setNet] = useState({});
 
     const latLon = useGeoLocation();
-    
-    useEffect(() => {
-      console.log("initial load"); 
-      if (isVisible) {
-        console.log("reloaded"); 
-        if(latLon){
-          //console.log("Lat", latLon[1])
-          console.log("Network", netInfo)
-          netInfo.isConnected === true ?
-          axios.get(`${currentLocationWeather(latLon)}`).then(response => {
-            setWeatherData(response.data);
-            setWeatherImage(response.data.weather[0].main);
-            setWeatherColor(response.data.weather[0].main);
-            setLoading(false);
-          })
-          : `${Alert.alert(
+   // console.log("LAnces", netInfo)
+
+   useEffect(() => {
+
+    //console.log("called when screen open and also on close"); 
+     try {
+// Subscribe
+        const unsubscribe = NetInfo.addEventListener(state => {
+          console.log("Connection type", state.type);
+          console.log("Is connected?", state.isConnected);
+          !state.isConnected ? `${Alert.alert(
             "NETWORK INFO",
             "You're currently offline, Press OK to view saved favourite locations.",
             [
@@ -57,6 +53,27 @@ const Home = props => {
             ],
             { cancelable: false }
           )}`
+          : state.isConnected
+        });
+
+        // Unsubscribe
+        unsubscribe();
+     } catch (e) {}
+
+  }, []);
+
+
+    useEffect(() => {
+      if (isVisible) {
+        if(latLon){
+          //console.log("Lat", latLon[1]
+          axios.get(`${currentLocationWeather(latLon)}`).then(response => {
+            setWeatherData(response.data);
+            setWeatherImage(response.data.weather[0].main);
+            setWeatherColor(response.data.weather[0].main);
+           
+          })
+          
           ;
         }
      }
@@ -81,17 +98,16 @@ const Home = props => {
         setWeatherDataFocust(weatherByDate);
         setDays(Days);
         setWeeklyDays(weekDays);
-       
+        setLoading(false);
       });
     }
     }, [latLon]);
   
-    if (isLoading) {
+    if (isLoading ) {
       return <View style={styles.activityLoader}>
         <ActivityIndicator size="large" color="#9bc235"/>
       </View>;
     }
-
   return (
     <View style={{
       flex: 1,
@@ -99,7 +115,7 @@ const Home = props => {
       justifyContent: 'center',
       alignItems: 'stretch',
     }}>
-
+     
       <View style={styles.imageContainer}>
         <Image style={styles.img} source={getImage(`${weatherImage}`)} />
         <Text style={styles.mainForecast}>{JSON.stringify(weatherData.main.temp)}&#8451;</Text>
@@ -108,6 +124,7 @@ const Home = props => {
       </View>
       <View style={{height: '8%', backgroundColor: `${getColor(weatherColor)}`}}>
        <View style={styles.todaysWeather}>
+
             <Text style={styles.title}> {JSON.stringify(weatherData.main.temp_min)}&#8451; </Text> 
             <Text style={styles.title}> {JSON.stringify(weatherData.main.temp)}&#8451; </Text>
             <Text style={styles.title}> {JSON.stringify(weatherData.main.temp_max)}&#8451; </Text>
@@ -162,9 +179,10 @@ const Home = props => {
                     { coordinates: geolocation})}
                     ></Button>
                     <Button color={Colors.accent} title="View List" onPress={() => props.navigation.navigate('List')}/>
-            </View>
+        </View>
       </View>
       <StatusBar style="auto" />
+
     </View>
   );
   

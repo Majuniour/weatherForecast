@@ -4,9 +4,9 @@ WEATHER MOBILE APP (REACT NATIVE)
 Branches
 --------
 Three main branches exist:
-- dev
+- test
 - staging
-- production
+- prod
 
 Requirements:
 -------------
@@ -27,4 +27,3 @@ To Build:
 
 - For android: expo build:android
 - For IOS: expo build:ios
-
